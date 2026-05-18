@@ -1,0 +1,14 @@
+airplane -- Pop indie
+automobile -- Mundo
+bird -- Ambiente
+cat -- Rnb
+deer -- Clásica
+dog -- Hip hop
+frog -- Techno
+horse -- Piano clásico
+ship -- Rock
+truck -- Metal
+
+
+Ambiente, Clásica, Hip Hop, Metal, Mundo, Piano clásico, Pop indie, Rnb, Rock, Techno
+Airplane, Automobile, Bird, Cat, Deer, Dog, Frog, Horse, Ship, Truck

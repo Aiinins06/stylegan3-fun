@@ -7,7 +7,7 @@ import pandas as pd
 import joblib
 import csv
 import time
-import gc
+import gc   
 # import umap as umap_lib
 import plotly.express as px
 from sklearn.linear_model import LogisticRegression

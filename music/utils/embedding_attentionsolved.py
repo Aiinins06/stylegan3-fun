@@ -27,7 +27,7 @@ class MusicEmbedder:
         print(f"Model loaded. Target sample rate: {self.target_sample_rate} Hz")
 
     def _sanitize_filename(self, text):
-        # Normalize unicode y quit no ASCII characters
+        # Normalize unicode
         text = unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore').decode('utf-8')
         return text.replace(" ", "")
 
@@ -216,7 +216,7 @@ class MusicEmbedder:
                 # Diccionario para agrupar partes bajo el mismo Parent ID
                 canciones_agrupadas = {}
                 for f in mp3_files_raw:
-                    # Extraemos el nombre base igual que haces más abajo
+                    # Extraemos el nombre base 
                     if "_part" in f:
                         base_name = f.rsplit('_part', 1)[0]
                     else:
@@ -226,7 +226,7 @@ class MusicEmbedder:
                         canciones_agrupadas[base_name] = []
                     canciones_agrupadas[base_name].append(f)
                 
-                # Seleccionamos las primeras 'max_songs' canciones PADRE completas
+                # Seleccionamos las primeras 'max_songs' canciones completadas
                 mp3_files = []
                 for base_name in list(canciones_agrupadas.keys())[:max_songs]:
                     mp3_files.extend(canciones_agrupadas[base_name])
@@ -271,7 +271,6 @@ class MusicEmbedder:
                 print(f'Total chunks processed: {len(genre_embeddings)}')
                 print(f"Shape: {embedding_matrix.shape}")
                 
-                # Nombre de archivo específico para este género
                 safe_genre = self._sanitize_filename(genre)
                 filename = f"{self.only_name_model}_attention{self.attention}_{safe_genre}.pt"
                 save_path = os.path.join(save_dir, filename)
@@ -283,7 +282,6 @@ class MusicEmbedder:
                     'song_names': genre_song_names
                 }, save_path)
                 
-                # LIMPIEZA DE MEMORIA OBLIGATORIA
                 del embedding_matrix
                 del genre_embeddings
                 del genre_labels
@@ -292,5 +290,5 @@ class MusicEmbedder:
                 gc.collect()
 
         print("\nDONE. All genres saved individually.")
-        return torch.empty(0), [] # Retorno dummy para mantener compatibilidad
+        return torch.empty(0), [] 
     
