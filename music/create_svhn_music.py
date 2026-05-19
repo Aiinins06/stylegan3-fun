@@ -1,12 +1,22 @@
 import os
+import zipfile
 import json
 import numpy as np
 from torchvision.datasets import SVHN
 from tqdm import tqdm
+from PIL import Image
+import io
 
-def prepare_stylegan_svhn_dataset():
+def build_stylegan_zip():
+    zip_path = "/dataslow/storage/Experiments/INTERNS/anavarror/gans/svhn_music_conditioned.zip"
+    centroids_path = "/dataslow/storage/Experiments/INTERNS/anavarror/gans/musical_centroids.npy"
+
     print("Loading musical centroids...")
-    centroides = np.load("/dataslow/storage/Experiments/INTERNS/anavarror/gans/musical_centroids.npy", allow_pickle=True).item()
+    try:
+        centroides = np.load(centroids_path, allow_pickle=True).item()
+    except Exception as e:
+        print(f"Error loading centroids\n{e}")
+        return
 
     svhn_to_genre = {
         0: "Pop indie",
@@ -21,40 +31,37 @@ def prepare_stylegan_svhn_dataset():
         9: "Metal"
     }
 
-    out_dir = "/dataslow/storage/Experiments/INTERNS/anavarror/gans/svhn_music_raw"
-    os.makedirs(out_dir, exist_ok=True)
-
     print("Downloading SVHN...")
-    # SVHN usa 'split="train"' en lugar de 'train=True'
     dataset = SVHN(root="./data", split='train', download=True)
 
-    labels_dict = {}
+    labels_list = []
 
-    print("Mapping images with musical vectors...")
-    for i, (img, label_idx) in enumerate(tqdm(dataset, desc="Processing images")):
-        # SVHN returns the labels as intenger from 0 to 9
-        genero = svhn_to_genre[label_idx]
+    print(f"Creating file ZIP in: {zip_path}")
+    os.makedirs(os.path.dirname(zip_path), exist_ok=True)
+
+    with zipfile.ZipFile(zip_path, 'w', compression=zipfile.ZIP_STORED) as zf:
         
-        if genero not in centroides:
-            raise KeyError(f"¡Error! El género '{genero}' no se encontró en el .npy")
+        for i, (img, label_idx) in enumerate(tqdm(dataset, desc="Writing images to ZIP")):
+            genero = svhn_to_genre[label_idx]
+            
+            if genero not in centroides:
+                raise KeyError(f"¡Error! Genre '{genero}' not found in .npy")
 
-        vector_condicion = centroides[genero].tolist() 
+            vector_condicion = [float(val) for val in centroides[genero]]
+            
+            img_name = f"img_{i:06d}.png"
+            
+            # Save image to memory and then to ZIP
+            img_byte_arr = io.BytesIO()
+            img.save(img_byte_arr, format='PNG')
+            zf.writestr(img_name, img_byte_arr.getvalue())
 
-        img_name = f"img_{i:06d}.png"
-        img.save(os.path.join(out_dir, img_name))
 
-        # Asigning conditional vector to image
-        labels_dict[img_name] = vector_condicion
+            labels_list.append([img_name, vector_condicion])
 
-    print("Writing dataset.json...")
-    with open(os.path.join(out_dir, "dataset.json"), "w") as f:
-        json.dump({"labels": labels_dict}, f)
-
-    print(f"\n¡Done! Folder '{out_dir}' ready for StyleGAN.")
+        print("Writing dataset.json inside ZIP...")
+        json_data = json.dumps({"labels": labels_list})
+        zf.writestr("dataset.json", json_data)
 
 if __name__ == "__main__":
-    prepare_stylegan_svhn_dataset()
-
-    # python dataset_tool.py --source=svhn_music_raw --dest=datasets/svhn_music_condicionado.zip
-
-    # python train.py --outdir=training-runs --cfg=stylegan2 --data=datasets/svhn_music_condicionado.zip --gpus=1 --batch=32 --gamma=1 --cond=True --mirror=0 
+    build_stylegan_zip()
