@@ -1,12 +1,12 @@
 import os
 import numpy as np
 
-from utils.model_training import MusicGenreClassifier
+from music.utils.model_training import MusicGenreClassifier
 
 
 
 MODEL_NAME = '/dataslow/storage/Experiments/INTERNS/anavarror/models/MERT-v1-95M'
-GENRES_TO_PROCESS = ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal", "Alternativa", "Piano clasico"] 
+GENRES_TO_PROCESS = ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal", "Pop indie", "Piano clasico"] 
 NAME_GENRES = ""
 for genre in GENRES_TO_PROCESS:
         NAME_GENRES += genre + "_"

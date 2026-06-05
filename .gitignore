@@ -170,4 +170,4 @@ out/
 training-runs/
 pretrained/
 video/
-_screenshots/
+_screenshots/music/data/*.mat

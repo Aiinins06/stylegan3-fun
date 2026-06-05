@@ -65,3 +65,10 @@ def build_stylegan_zip():
 
 if __name__ == "__main__":
     build_stylegan_zip()
+
+
+"""
+CUDA_VISIBLE_DEVICES=0 python train.py --outdir=/dataslow/storage/Experiments/INTERNS/anavarror/gans/training_svhn --cfg=stylegan2
+--data=/dataslow/storage/Experiments/INTERNS/anavarror/gans/svhn_music_conditioned.zip \
+--gpus=1 --batch=32 --gamma=1 --cond=True --mirror=0 \
+"""

@@ -12,15 +12,12 @@ os.environ["TORCH_CPP_LOG_LEVEL"] = "ERROR"
 
 from utils.model_training import MusicGenreClassifier
 
-GENRES_TO_PROCESS = ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal", "Alternativa", "Piano clasico"] 
-# ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal"] 
-# ["Electrónico", "Hip Hop Convencional", "Ambiente", "Rock", "Pop", "Jazz Clásico", "Techno Y Trance", 
-# "Clásica", "Salsa", "Rnb", "Mundo", "Metal", "Alternativa", "Pop indie", "Piano clasico"]
+GENRES_TO_PROCESS = ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal", "Pop indie", "Piano clasico"] 
+
 
 
 MODEL_NAME = '/dataslow/storage/Experiments/INTERNS/anavarror/models/MERT-v1-95M'
-# MODEL_NAME = '/dataslow/storage/Experiments/INTERNS/anavarror/models/m-a-p_music2vec-v1'
-# MODEL_NAME = "/dataslow/storage/Experiments/INTERNS/anavarror/models/facebook_wav2vec2-base"
+
 
 NAME_GENRES = ""
 for genre in GENRES_TO_PROCESS:
@@ -60,13 +57,6 @@ if __name__ == "__main__":
         genre_list = GENRES_TO_PROCESS,
     )
 
-    #  ==================== CROSS-ENTROPY LOSS ======================
-    # classifier.train_classifier_ce(epochs=EPOCHS, batch_size=BATCH_SIZE, lr=LR, criterion=CRITERION_CE)
-
-    # ===================== CROSS-ENTROPY LOSS + SUPERVISED CONTRASTIVE LOSS ==================================
-    # classifier.train_classifier_supcon(epochs=EPOCHS, batch_size=BATCH_SIZE, lr=LR, criterion_ce=CRITERION_CE, criterion_supcon=CRITERION_SUPCON, alpha=LAMBDA)
-
-    # ===================== HALO LOSS ===================
     classifier.train_classifier_halo(epochs=EPOCHS, batch_size=BATCH_SIZE, lr=LR, dropout=DROPOUT)
 
 

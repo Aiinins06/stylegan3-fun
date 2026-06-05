@@ -9,17 +9,11 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "3"
 os.environ["TORCH_CPP_LOG_LEVEL"] = "ERROR"
 
 from utils.model_training import MusicGenreClassifier
-# from utils.check_output_model import check_accuracy, get_ground_truth
 
-GENRES_TO_PROCESS = ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal", "Alternativa", "Piano clasico"]
-# ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal"] 
-# ["Electrónico", "Hip Hop Convencional", "Ambiente", "Rock", "Pop", "Jazz Clásico", "Techno Y Trance", 
-# "Clásica", "Salsa", "Rnb", "Mundo", "Metal", "Pop indie", "Alternativa", "Piano clasico"]
+GENRES_TO_PROCESS = ["Hip Hop Convencional", "Ambiente", "Rock", "Techno Y Trance", "Clásica", "Rnb", "Mundo", "Metal", "Pop indie", "Piano clasico"]
 
 
 MODEL_NAME = '/dataslow/storage/Experiments/INTERNS/anavarror/models/MERT-v1-95M'
-# MODEL_NAME = '/dataslow/storage/Experiments/INTERNS/anavarror/models/m-a-p_music2vec-v1'
-# MODEL_NAME = "/dataslow/storage/Experiments/INTERNS/anavarror/models/facebook_wav2vec2-base"
 
 NAME_GENRES = ""
 for genre in GENRES_TO_PROCESS:
@@ -41,8 +35,6 @@ MODE = 'halo'
 
 # DIRECTORY
 FEATURE_SPACE = f'/dataslow/storage/Experiments/INTERNS/anavarror/feature_spaces_1k_20s_contain_fragments/{ONLY_NAME_MODEL}_attention{ATTENTION}'
-# FILE
-# FEATURE_SPACE = f'/datafast/105-1/Datasets/INTERNS/anavarror/feature_spaces_1k_20s_contain_fragments/{ONLY_NAME_MODEL}_attention{ATTENTION}_{NAME_GENRES}.pt'
 
 
 # TEST_SONGS_FOLDER = "/datafast/105-1/Datasets/INTERNS/anavarror/test/hiphop_ambiente_rock_techno" 
@@ -57,10 +49,6 @@ RESULTS_BASE_DIR = os.path.join(BASE_DIR, prefix)
 os.makedirs(RESULTS_BASE_DIR, exist_ok=True)
 
 
-
-# NAME_CLASSIFIER = "/dataslow/storage/Experiments/INTERNS/anavarror/trainedmodels_containfrag_halo/" \
-#     "MERT-v1-95M_attentionFalse_pcaFalse_batch512_lr0.001_dropout0.6_Hip Hop Convencional_Ambiente_Rock_Techno Y Trance_Clásica_Rnb_Mundo_Metal_/" \
-#     "MERT-v1-95M_epochs120_lr0.001_batch512.joblib"
 
 NAME_CLASSIFIER = "/dataslow/storage/Experiments/INTERNS/anavarror/trainedmodels_containfrag_halo/" \
     "MERT-v1-95M_attentionFalse_pcaFalse_batch1024_lr0.001_dropout0.4_" \
@@ -91,13 +79,9 @@ if __name__ == "__main__":
         
         print(f"\nPrediction time: {result['inference_time']:.3f} seconds")
         print(result["label"])
-        # print(result["probabilities"])
-        # print(result["embedding"].shape)
+
         
         classifier.save_prediction_result(mp3_path=song_file, result=result, save_dir=RESULTS_BASE_DIR)
     
     full_csv_path = os.path.join(RESULTS_BASE_DIR, "results.csv")
 
-    
-    # print("\n--- STARTING VALIDATION ---")
-    # check_accuracy(csv_file_path=full_csv_path, ground_truth_dir=GT_SONGS)
